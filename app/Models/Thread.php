@@ -8,4 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Thread extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'thread_id';
+
+    protected $fillable = ['title, thread_text'];
+
+    public function replies()
+    {
+        return $this->hasMany(Reply::class,'thread_id');
+    }
+/*    public function addReply($reply)
+    {
+        $reply = $this->replies()->create($reply);
+
+        return $reply;
+    }
+    */
 }

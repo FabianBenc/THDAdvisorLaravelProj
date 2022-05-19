@@ -1,27 +1,25 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
+
 use Illuminate\Http\Request;
-use App\Models\Thread;
 use App\Models\Reply;
-class ThreadsController extends Controller
+class RepliesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    
     public function __construct()
     {
-        $this->middleware('auth')->except(['index','show']);
+        $this->middleware('auth');
     }
+
     public function index()
     {
         //
-        $threads = Thread::get();
-        return view('threads.index',compact('threads'));
+       
     }
 
     /**
@@ -32,7 +30,7 @@ class ThreadsController extends Controller
     public function create()
     {
         //
-        return view('threads.create');
+        return view('replies.create');
     }
 
     /**
@@ -43,24 +41,21 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
-        //
         
-        $this->validate ($request, [
-            'title' => 'required',
-            'thread_text' => 'required'
-        ]);
+        $reply = new Reply();
 
-        $thread = new Thread();
-
-        $thread->title = $request->input("title");
-        $thread->thread_text = $request->input("thread_text");
-        $thread->user_id = auth()->id();
-        $thread->likes = value(1);
-        $thread->pinned = True;
-
-        $thread->save();
+        $reply->reply = $request->input("reply");
+        $reply->user_reply_id = auth()->id();
+        $reply->likes = value(1);
+        $reply->thread_id = $request->input("thread_id");
+        $reply->save();
 
         return redirect()->route('threads.index');
+        
+
+        /*$reply = $thread->addReply(['reply' => request('reply'), 'user_reply_id' => auth()->id()]);
+
+        return back();*/
     }
 
     /**
@@ -72,12 +67,7 @@ class ThreadsController extends Controller
     public function show($id)
     {
         //
-        /*
-        $threads = DB::table('threads')->where('thread_id', $id)->get();
-        return view('threads.show',['threads'=>$threads[0]]);*/
-
-        $threads = Thread::where('thread_id', $id)->get();
-        return view('threads.show',['threads'=>$threads[0]]);
+        
     }
 
     /**
