@@ -1,5 +1,5 @@
 @extends('layouts.app')
-   
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -14,11 +14,17 @@
                         {{ $threads->thread_text }}
                     </p>
                     <hr />
+                    <form method="post" action="{{ route('threads.destroy', ['thread' => $threads->thread_id]) }}">
+                        @csrf
+
+                        @method('DELETE')
+                        <button type="submit"class="btn btn-danger">Delete</button>
+                    </form>
                     <h4>Display Replies</h4>
 
                     <hr />
                     @include('replies.repliesShow', ['replies' => $threads->replies, 'thread_id' => $threads->thread_id])
-   
+
                     <h4>Reply</h4>
                     <form method="post" action="{{ route('replies.store') }}">
                         @csrf

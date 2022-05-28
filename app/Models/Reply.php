@@ -10,7 +10,7 @@ class Reply extends Model
     use HasFactory;
 
     protected $primaryKey = 'reply_id';
-    
+
     protected $fillable = ['user_reply_id','thread_id','reply'];
 
     public function user()
@@ -22,10 +22,5 @@ class Reply extends Model
     public function replies()
     {
         return $this->hasMany(Reply::class,'reply_id');
-    }
-
-    public function cigomigo()
-    {
-        return "cigomigo";
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
 use Illuminate\Http\Request;
 use App\Models\Thread;
 use App\Models\Reply;
+use App\Http\Controllers\Auth;
+use Symfony\Component\Console\Output\ConsoleOutput;
 class ThreadsController extends Controller
 {
     /**
@@ -12,7 +13,7 @@ class ThreadsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function __construct()
     {
         $this->middleware('auth')->except(['index','show']);
@@ -44,7 +45,7 @@ class ThreadsController extends Controller
     public function store(Request $request)
     {
         //
-        
+
         $this->validate ($request, [
             'title' => 'required',
             'thread_text' => 'required'
@@ -56,7 +57,7 @@ class ThreadsController extends Controller
         $thread->thread_text = $request->input("thread_text");
         $thread->user_id = auth()->id();
         $thread->likes = value(1);
-        $thread->pinned = True;
+        $thread->pinned = False;
 
         $thread->save();
 
@@ -112,5 +113,8 @@ class ThreadsController extends Controller
     public function destroy($id)
     {
         //
+        $user_id = auth()->id();
+        $threads = Thread::where('thread_id', $id)->where('user_id', $user_id)->delete();
+        return redirect()->route('threads.index');
     }
 }

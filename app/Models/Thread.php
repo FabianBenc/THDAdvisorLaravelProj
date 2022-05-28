@@ -24,4 +24,10 @@ class Thread extends Model
         return $reply;
     }
     */
+
+    public function user()
+    {
+
+        return $this->belongsTo(User::class,'user_id');
+    }
 }

@@ -19,7 +19,7 @@ class RepliesController extends Controller
     public function index()
     {
         //
-       
+
     }
 
     /**
@@ -41,7 +41,11 @@ class RepliesController extends Controller
      */
     public function store(Request $request)
     {
-        
+
+        $this->validate ($request, [
+            'reply' => 'required'
+        ]);
+
         $reply = new Reply();
 
         $reply->reply = $request->input("reply");
@@ -50,8 +54,8 @@ class RepliesController extends Controller
         $reply->thread_id = $request->input("thread_id");
         $reply->save();
 
-        return redirect()->route('threads.index');
-        
+        return back();
+
 
         /*$reply = $thread->addReply(['reply' => request('reply'), 'user_reply_id' => auth()->id()]);
 
@@ -67,7 +71,7 @@ class RepliesController extends Controller
     public function show($id)
     {
         //
-        
+
     }
 
     /**
@@ -102,5 +106,13 @@ class RepliesController extends Controller
     public function destroy($id)
     {
         //
+        $user_id = auth()->id();
+        $reply = Reply::where('reply_id', $id)->where('user_reply_id', $user_id)->delete();
+        return back();
+    }
+
+    public function getThreadCount()
+    {
+
     }
 }
