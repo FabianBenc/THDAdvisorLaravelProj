@@ -88,14 +88,11 @@
               </tr>
             </tbody>
           </table>
-          <h3>Replies</h3>
-          @include('replies.repliesShow', ['replies' => $threads->replies, 'thread_id' => $threads->thread_id])
-
           <form method="post" class="mb-3" action="{{ route('replies.store') }}">
             @csrf
             <div class="form-group">
             <label for="reply">Reply to this post:</label>
-                <textarea class="form-control" name="reply"  rows="10" placeholder="Write your comment here."></textarea>
+                <textarea class="form-control" name="reply"  rows="5" placeholder="Write your comment here."></textarea>
                 <input type="hidden" name="thread_id" value="{{ $threads->thread_id }}"/>
             </div>
             <div class="form-group">
@@ -103,6 +100,8 @@
                 <button type="reset" class="btn btn-danger">Reset</button>
             </div>
            </form>
+          <h3>Replies</h3>
+          @include('replies.repliesShow', ['replies' => $threads->replies, 'thread_id' => $threads->thread_id])
         </div>
     </div>
 </div>
