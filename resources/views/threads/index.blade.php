@@ -19,7 +19,7 @@
 </div> -->
 
 
-<a href='/threads/create'> Create New Thread</a>
+<a href='/threads/create' class="btn btn-lg btn-primary">New Topic</a>
 <div class="container my-3">
       <nav class="breadcrumb">
         <a href="index.html" class="breadcrumb-item">Board index</a>
@@ -35,7 +35,7 @@
                 <th scope="col" class="topic-col">Topic</th>
                 <th scope="col" class="created-col">Created</th>
                 <th scope="col">Statistics</th>
-                <th scope="col" class="last-post-col">Last post</th>
+                <th scope="col" class="last-post-col">Latest post</th>
               </tr>
             </thead>
             <tbody>
@@ -44,19 +44,24 @@
                 <td>
                   <!--<span class="badge badge-primary">7 unread</span>-->
                   <h3 class="h6"><a href="{{url('/threads',[$thread->thread_id])}}">{{$thread->title}}</a></h3>
-                  <div class="small">Go to page: <a href="#0">1</a>, <a href="#0">2</a>, <a href="#0">3</a> &hellip; <a href="#0">7</a>, <a href="#0">8</a>, <a href="#0">9</a></div>
+                  <!--<div class="small">Go to page: <a href="#0">1</a>, <a href="#0">2</a>, <a href="#0">3</a> &hellip; <a href="#0">7</a>, <a href="#0">8</a>, <a href="#0">9</a></div>-->
                 </td>
                 <td>
                   <div>by <a href="#">{{$thread->user->name}}</a></div>
-                  <div>03 Apr 2017, 13:46</div>
+                  <div>Created at: {{$thread->created_at}}</div>
                 </td>
                 <td>
-                  <div>{{ $thread->replies->count()}}</div>
-                  <div>179 views</div>
+                  <div>Replies: {{ $thread->replies->count()}}</div>
+                  <!--<div>179 views</div>-->
                 </td>
                 <td>
-                  <div>by <a href="#">Author name</a></div>
-                  <div>05 Apr 2017, 20:07</div>
+                @if($thread->replies->count() > 0)
+                    <div>by: {{$thread->replies->last()->user->name}}</a></div>
+                    <div>Posted at: {{$thread->replies->last()->created_at}}</div>
+                @else
+                    <div>by: {{$thread->user->name}}</div>
+                    <div>Posted at: {{$thread->created_at}}</div>
+                @endif
                 </td>
               </tr>
             @endforeach

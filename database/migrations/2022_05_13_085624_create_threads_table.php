@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('threads', function (Blueprint $table) {
             $table->id("thread_id");
-            $table->string("title");
-            $table->string("thread_text");
+            $table->longText("title");
+            $table->longText("thread_text");
             $table->unsignedBigInteger('user_id');
             $table->integer("Likes");
             $table->boolean("Pinned");

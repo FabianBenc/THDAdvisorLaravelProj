@@ -110,9 +110,4 @@ class RepliesController extends Controller
         $reply = Reply::where('reply_id', $id)->where('user_reply_id', $user_id)->delete();
         return back();
     }
-
-    public function getThreadCount()
-    {
-
-    }
 }
