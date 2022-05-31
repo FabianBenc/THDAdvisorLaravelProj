@@ -28,7 +28,7 @@
       </nav>
       <div class="row">
         <div class="col-12" style="background-color: white;">
-          <h2 class="h4 text-white bg-info mb-0 p-4 rounded-top">Forum name</h2>
+          <h2 class="h4 text-white bg-info mb-0 p-4 rounded-top">THD Advisor</h2>
           <table class="table table-striped table-bordered table-responsive-lg">
             <thead class="thead-light">
               <tr>
@@ -45,6 +45,14 @@
                   <!--<span class="badge badge-primary">7 unread</span>-->
                   <h3 class="h6"><a href="{{url('/threads',[$thread->thread_id])}}">{{$thread->title}}</a></h3>
                   <!--<div class="small">Go to page: <a href="#0">1</a>, <a href="#0">2</a>, <a href="#0">3</a> &hellip; <a href="#0">7</a>, <a href="#0">8</a>, <a href="#0">9</a></div>-->
+                  @if($thread->categories->count() > 0)
+                  Categories:
+                    @foreach($thread->categories as $category)
+                        <div>{{$category->title}}</div>
+                    @endforeach
+                  @else
+                  No Categories
+                  @endif
                 </td>
                 <td>
                   <div>by <a href="#">{{$thread->user->name}}</a></div>

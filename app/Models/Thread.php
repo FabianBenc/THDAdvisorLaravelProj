@@ -17,17 +17,15 @@ class Thread extends Model
     {
         return $this->hasMany(Reply::class,'thread_id');
     }
-/*    public function addReply($reply)
-    {
-        $reply = $this->replies()->create($reply);
-
-        return $reply;
-    }
-    */
 
     public function user()
     {
 
         return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class,'categories_thread','thread_id');
     }
 }

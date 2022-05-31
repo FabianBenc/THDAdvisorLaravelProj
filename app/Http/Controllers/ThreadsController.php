@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Thread;
 use App\Models\Reply;
+use App\Models\Category;
 use App\Http\Controllers\Auth;
 use Symfony\Component\Console\Output\ConsoleOutput;
 class ThreadsController extends Controller
@@ -22,7 +23,8 @@ class ThreadsController extends Controller
     {
         //
         $threads = Thread::get();
-        return view('threads.index',compact('threads'));
+        $categories = Category::get();
+        return view('threads.index',compact('threads'),compact('categories'));
     }
 
     /**
@@ -33,7 +35,8 @@ class ThreadsController extends Controller
     public function create()
     {
         //
-        return view('threads.create');
+        $categories = Category::get();
+        return view('threads.create',compact('categories'));
     }
 
     /**
@@ -45,7 +48,6 @@ class ThreadsController extends Controller
     public function store(Request $request)
     {
         //
-
         $this->validate ($request, [
             'title' => 'required',
             'thread_text' => 'required'
@@ -60,6 +62,9 @@ class ThreadsController extends Controller
         $thread->pinned = False;
 
         $thread->save();
+
+        $category = Category::find($request->cigomigo);
+        $thread->categories()->attach($category);
 
         return redirect()->route('threads.index');
     }

@@ -42,6 +42,18 @@
               <label for="comment">Comment:</label>
               <textarea class="form-control" id="thread_text" name="thread_text" rows="10" placeholder="Write your comment here." required></textarea>
             </div>
+
+            <div class="form-group">
+            Choose categories:
+            @foreach($categories as $category)
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="{{$category->id}}" name="cigomigo[]" id="flexCheckDefault">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        {{$category->title}}
+                    </label>
+                </div>
+            @endforeach
+            </div>
             <button type="submit" class="btn btn-primary">Create topic</button>
             <button type="reset" class="btn btn-danger">Reset</button>
           </form>
