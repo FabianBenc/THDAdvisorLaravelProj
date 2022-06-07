@@ -36,6 +36,9 @@
                 <th scope="col" class="created-col">Created</th>
                 <th scope="col">Statistics</th>
                 <th scope="col" class="last-post-col">Latest post</th>
+                @if(Auth::user()->is_admin)
+                <th scope="col">Action</th>
+                @endif
               </tr>
             </thead>
             <tbody>
@@ -71,6 +74,11 @@
                     <div>Posted at: {{$thread->created_at}}</div>
                 @endif
                 </td>
+                @if((Auth::user()->id == $thread->user_id) || (Auth::user()->is_admin))
+                <td>
+                    <button type="submit"class="btn btn-danger">Delete</button>
+                </td>
+                @endif
               </tr>
             @endforeach
             </tbody>

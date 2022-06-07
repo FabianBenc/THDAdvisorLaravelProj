@@ -54,7 +54,7 @@
             <form method="post" action="{{ route('threads.destroy', ['thread' => $threads->thread_id]) }}">
                 @csrf
                 @method('DELETE')
-                @if(Auth::user()->id == $threads->user_id)
+                @if((Auth::user()->id == $threads->user_id) || (Auth::user()->is_admin))
                 <button type="submit"class="btn btn-danger">Delete</button>
                 @endif
             </form>

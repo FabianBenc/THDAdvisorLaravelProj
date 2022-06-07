@@ -40,7 +40,7 @@
                     @csrf
 
                     @method('DELETE')
-                    @if(Auth::user()->id == $reply->user_reply_id)
+                    @if((Auth::user()->id == $reply->user_reply_id) || (Auth::user()->is_admin))
                     <button type="submit"class="btn btn-danger">Delete</button>
                     @endif
                     </form>
