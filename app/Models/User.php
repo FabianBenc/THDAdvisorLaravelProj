@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class);
     }
+
+    public function likedReplies()
+    {
+        return $this->belongsToMany(Reply::class,'likes','user_id','reply_id')->withPivot('is_dislike')->withTimestamps();
+    }
 }

@@ -23,4 +23,9 @@ class Reply extends Model
     {
         return $this->hasMany(Reply::class,'reply_id');
     }
+
+    public function likes()
+    {
+        return $this->belongsToMany(User::class,'likes','reply_id')->withPivot('is_dislike')->withTimestamps();
+    }
 }

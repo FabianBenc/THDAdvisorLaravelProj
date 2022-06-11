@@ -11,6 +11,6 @@ class Category extends Model
 
     public function threads()
     {
-        return $this->belongsToMany(Threads::class,'categories_thread','thread_id');
+        return $this->belongsToMany(Thread::class,'categories_thread','category_id','thread_id');
     }
 }

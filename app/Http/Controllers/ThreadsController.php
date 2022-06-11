@@ -58,12 +58,11 @@ class ThreadsController extends Controller
         $thread->title = $request->input("title");
         $thread->thread_text = $request->input("thread_text");
         $thread->user_id = auth()->id();
-        $thread->likes = value(1);
         $thread->pinned = False;
 
         $thread->save();
 
-        $category = Category::find($request->cigomigo);
+        $category = Category::find($request->categoryList);
         $thread->categories()->attach($category);
 
         return redirect()->route('threads.index');
@@ -118,8 +117,17 @@ class ThreadsController extends Controller
     public function destroy($id)
     {
         //
-        $user_id = auth()->id();
-        $threads = Thread::where('thread_id', $id)->where('user_id', $user_id)->delete();
+        //dd(auth());
+        $user = auth()->user();
+        if($user->is_admin)
+        {
+            $threads = Thread::where('thread_id', $id)->delete();
+        }
+        else
+        {
+            $user_id = auth()->id();
+            $threads = Thread::where('thread_id', $id)->where('user_id', $user_id)->delete();
+        }
         return redirect()->route('threads.index');
     }
 }

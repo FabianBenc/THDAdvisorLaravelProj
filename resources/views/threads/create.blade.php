@@ -47,7 +47,7 @@
             Choose categories:
             @foreach($categories as $category)
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="{{$category->id}}" name="cigomigo[]" id="flexCheckDefault">
+                    <input class="form-check-input" type="checkbox" value="{{$category->id}}" name="categoryList[]" id="flexCheckDefault" required>
                     <label class="form-check-label" for="flexCheckDefault">
                         {{$category->title}}
                     </label>
@@ -56,6 +56,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Create topic</button>
             <button type="reset" class="btn btn-danger">Reset</button>
+            <a href='/threads' class="btn btn-warning text-white">Cancel</a>
           </form>
         </div>
       </div>

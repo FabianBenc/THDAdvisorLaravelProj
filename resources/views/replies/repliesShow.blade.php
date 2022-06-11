@@ -35,15 +35,35 @@
                   <div><span class="font-weight-bold">Joined:</span><br>03 Apr 2017, 13:46</div>
                 </td>
                 <td>
+                    dislikes
+                    <p>{{$reply->likes->pluck('pivot')->where('is_dislike','1')->count()}}</p>
+                    likes
+                    <p>{{$reply->likes->pluck('pivot')->where('is_dislike','0')->count()}}</p>
                     <p>{{ $reply->reply }}</p>
-                    <form method="post" action="{{ route('replies.destroy', $reply, ['replies' => $reply->reply_id]) }}">
+                    <p>{{$reply->likes->pluck('pivot')->where('user_id',Auth::user()->id)->where('is_dislike','1')}}</p>
+                    <form method="post" action="{{ route('replies.destroy', $reply, ['replies' => $reply->reply_id])}}">
                     @csrf
-
                     @method('DELETE')
                     @if((Auth::user()->id == $reply->user_reply_id) || (Auth::user()->is_admin))
-                    <button type="submit"class="btn btn-danger">Delete</button>
+                        <button type="submit"class="btn btn-danger">Delete</button>
                     @endif
                     </form>
+                    @if($reply->likes->pluck('pivot')->where('user_id',Auth::user()->id)->count() > 0)
+                        already liked
+                    @else
+                    <form method="post" action="{{route('like', $reply, ['replies' => $reply->reply_id])}}">
+                    @csrf
+                    <button type="submit"class="btn btn-success">Like</button>
+                    </form>
+                    @endif
+                    @if($reply->likes->pluck('pivot')->where('user_id',Auth::user()->id)->where('is_dislike','1')->count() == 1)
+                        already disliked
+                    @else
+                    <form method="post" action="{{route('dislike', $reply, ['replies' => $reply->reply_id])}}">
+                    @csrf
+                    <button type="submit"class="btn btn-warning">Dislike</button>
+                    </form>
+                    @endif
                 </td>
               </tr>
             </tbody>

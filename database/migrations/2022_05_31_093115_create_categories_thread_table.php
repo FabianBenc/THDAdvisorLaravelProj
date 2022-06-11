@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger("category_id");
             $table->unsignedBigInteger("thread_id");
 
-            $table->foreign('thread_id')->references('thread_id')->on('threads');
+            $table->foreign('thread_id')->references('thread_id')->on('threads')->onDelete('cascade')->change();
             $table->foreign('category_id')->references('id')->on('categories');
         });
     }

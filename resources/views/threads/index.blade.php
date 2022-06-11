@@ -28,7 +28,13 @@
       </nav>
       <div class="row">
         <div class="col-12" style="background-color: white;">
-          <h2 class="h4 text-white bg-info mb-0 p-4 rounded-top">THD Advisor</h2>
+        @php
+            $colors = ["bg-info","bg-warning","bg-primary","bg-danger","bg-secondary","bg-light","bg-dark","bg-white"];
+            $i=0;
+        @endphp
+        @foreach($categories as $category)
+            <h2 class="h4 text-white {{$colors[$i++%8]}} mb-0 p-4 rounded-top">{{$category->title}}</h2>
+            @if(isset($thread))
           <table class="table table-striped table-bordered table-responsive-lg">
             <thead class="thead-light">
               <tr>
@@ -36,19 +42,19 @@
                 <th scope="col" class="created-col">Created</th>
                 <th scope="col">Statistics</th>
                 <th scope="col" class="last-post-col">Latest post</th>
-                @if(Auth::user()->is_admin)
+                @if((Auth::user()->id == $thread->user_id) || (Auth::user()->is_admin))
                 <th scope="col">Action</th>
                 @endif
               </tr>
             </thead>
             <tbody>
-            @foreach($threads as $thread)
+            @foreach($category->threads as $thread)
               <tr>
                 <td>
                   <!--<span class="badge badge-primary">7 unread</span>-->
                   <h3 class="h6"><a href="{{url('/threads',[$thread->thread_id])}}">{{$thread->title}}</a></h3>
                   <!--<div class="small">Go to page: <a href="#0">1</a>, <a href="#0">2</a>, <a href="#0">3</a> &hellip; <a href="#0">7</a>, <a href="#0">8</a>, <a href="#0">9</a></div>-->
-                  @if($thread->categories->count() > 0)
+                 @if($thread->categories->count() > 0)
                   Categories:
                     @foreach($thread->categories as $category)
                         <div>{{$category->title}}</div>
@@ -76,13 +82,21 @@
                 </td>
                 @if((Auth::user()->id == $thread->user_id) || (Auth::user()->is_admin))
                 <td>
-                    <button type="submit"class="btn btn-danger">Delete</button>
+                <form method="post" action="{{ route('threads.destroy', ['thread' => $thread->thread_id]) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit"class="btn btn-danger">Delete</button>
                 </td>
+                </form>
                 @endif
               </tr>
             @endforeach
+            @else
+            No threads yet. If you would like, create a new thread
+            @endif
             </tbody>
           </table>
+        @endforeach
         </div>
       </div>
 @endsection

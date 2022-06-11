@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Reply;
+use App\Models\User;
+use App\Http\Controllers\Auth;
 class RepliesController extends Controller
 {
     /**
@@ -50,7 +52,6 @@ class RepliesController extends Controller
 
         $reply->reply = $request->input("reply");
         $reply->user_reply_id = auth()->id();
-        $reply->likes = value(1);
         $reply->thread_id = $request->input("thread_id");
         $reply->save();
 
@@ -106,8 +107,30 @@ class RepliesController extends Controller
     public function destroy($id)
     {
         //
-        $user_id = auth()->id();
-        $reply = Reply::where('reply_id', $id)->where('user_reply_id', $user_id)->delete();
+        $user = auth()->user();
+        if($user->is_admin)
+        {
+            $reply = Reply::where('reply_id', $id)->delete();
+        }
+        else
+        {
+            $user_id = auth()->id();
+            $reply = Reply::where('reply_id', $id)->where('user_reply_id', $user_id)->delete();
+        }
         return back();
+    }
+
+    public function liker($reply_id)
+    {
+        $user = User::findorFail(auth()->user()->id);
+        $user->likedReplies()->attach($reply_id);
+        return redirect()->back();
+    }
+
+    public function disliker($reply_id)
+    {
+        $user = User::findorFail(auth()->user()->id);
+        $user->likedReplies()->attach($reply_id,['is_dislike'=> 1]);
+        return redirect()->back();
     }
 }
