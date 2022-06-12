@@ -33,28 +33,34 @@
             $i=0;
         @endphp
         @foreach($categories as $category)
+
+        @php
+            $threads = $category->threads->toQuery()->simplePaginate(2,['*'],$category->title.'page', $page[Str::replace(' ','_',$category->title.'page')]);
+        @endphp
             <h2 class="h4 text-white {{$colors[$i++%8]}} mb-0 p-4 rounded-top">{{$category->title}}</h2>
-            @if(isset($thread))
-          <table class="table table-striped table-bordered table-responsive-lg">
-            <thead class="thead-light">
-              <tr>
-                <th scope="col" class="topic-col">Topic</th>
-                <th scope="col" class="created-col">Created</th>
-                <th scope="col">Statistics</th>
-                <th scope="col" class="last-post-col">Latest post</th>
-                @if((Auth::user()->id == $thread->user_id) || (Auth::user()->is_admin))
-                <th scope="col">Action</th>
+            @if($threads->isNotEmpty())
+            @foreach($threads as $thread)
+                @if($loop->first)
+                    <table class="table table-striped table-bordered table-responsive-lg">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col" class="topic-col">Topic</th>
+                            <th scope="col" class="created-col">Created</th>
+                            <th scope="col">Statistics</th>
+                            <th scope="col" class="last-post-col">Latest post</th>
+                            @if((Auth::user()->id == $thread->user_id) || (Auth::user()->is_admin))
+                            <th scope="col">Action</th>
+                            @endif
+                        </tr>
+                        </thead>
+                        <tbody>
                 @endif
-              </tr>
-            </thead>
-            <tbody>
-            @foreach($category->threads as $thread)
               <tr>
                 <td>
                   <!--<span class="badge badge-primary">7 unread</span>-->
                   <h3 class="h6"><a href="{{url('/threads',[$thread->thread_id])}}">{{$thread->title}}</a></h3>
                   <!--<div class="small">Go to page: <a href="#0">1</a>, <a href="#0">2</a>, <a href="#0">3</a> &hellip; <a href="#0">7</a>, <a href="#0">8</a>, <a href="#0">9</a></div>-->
-                 @if($thread->categories->count() > 0)
+                  @if($thread->categories->count() > 0)
                   Categories:
                     @foreach($thread->categories as $category)
                         <div>{{$category->title}}</div>
@@ -91,8 +97,9 @@
                 @endif
               </tr>
             @endforeach
+            {{$threads->appends(Arr::except(Request::query(), $category->title.'page'))->links()}}
             @else
-            No threads yet. If you would like, create a new thread
+            Nothing at the moment
             @endif
             </tbody>
           </table>

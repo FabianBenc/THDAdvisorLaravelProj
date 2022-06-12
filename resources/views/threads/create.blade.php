@@ -36,24 +36,33 @@
             @csrf
             <div class="form-group">
               <label for="title">Topic:</label>
-              <input type="text" class="form-control" id="title" name="title" placeholder="Give your topic a title." required>
+              <input type="text" class="form-control" id="title" name="topic" placeholder="Give your topic a title.">
             </div>
             <div class="form-group">
               <label for="comment">Comment:</label>
-              <textarea class="form-control" id="thread_text" name="thread_text" rows="10" placeholder="Write your comment here." required></textarea>
+              <textarea class="form-control" id="thread_text" name="comment" rows="10" placeholder="Write your comment here."></textarea>
             </div>
 
             <div class="form-group">
             Choose categories:
             @foreach($categories as $category)
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="{{$category->id}}" name="categoryList[]" id="flexCheckDefault" required>
+                    <input class="form-check-input" type="checkbox" value="{{$category->id}}" name="categoryList[]" id="flexCheckDefault">
                     <label class="form-check-label" for="flexCheckDefault">
                         {{$category->title}}
                     </label>
                 </div>
             @endforeach
             </div>
+            @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
             <button type="submit" class="btn btn-primary">Create topic</button>
             <button type="reset" class="btn btn-danger">Reset</button>
             <a href='/threads' class="btn btn-warning text-white">Cancel</a>

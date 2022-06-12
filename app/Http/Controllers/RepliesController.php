@@ -122,15 +122,60 @@ class RepliesController extends Controller
 
     public function liker($reply_id)
     {
+        //dd($reply_id);
+        $user_id = auth()->user()->id;
         $user = User::findorFail(auth()->user()->id);
-        $user->likedReplies()->attach($reply_id);
+        //dd($user->likedReplies, $user->likedReplies());
+        $checkUser = $user->likedReplies()->where('likes.reply_id', $reply_id)->get();
+        //dd($checkUser->pluck('pivot'));
+
+        if($checkUser->count() > 0)
+        // ako je checkUSer dislajkovani onda lajkuj inace moras da obrises bre
+        {
+            if($checkUser->pluck('pivot')->where('is_dislike', '1')->count() > 0)
+            {
+                $user->likedReplies()->where('reply_id', $reply_id)->detach($reply_id,$user_id);
+                $user->likedReplies()->attach($reply_id);
+            }
+            else
+            {
+            $user->likedReplies()->where('reply_id', $reply_id)->detach($reply_id,$user_id);
+            }
+        }
+        else
+        {
+            $user->likedReplies()->attach($reply_id);
+        }
         return redirect()->back();
     }
 
     public function disliker($reply_id)
     {
+        //dd($reply_id);
+        $user_id = auth()->user()->id;
         $user = User::findorFail(auth()->user()->id);
-        $user->likedReplies()->attach($reply_id,['is_dislike'=> 1]);
+        //dd($user->likedReplies, $user->likedReplies());
+        $checkUser = $user->likedReplies()->where('likes.reply_id', $reply_id)->get();
+        //dd($checkUser->pluck('pivot'));
+
+        if($checkUser->count() > 0)
+        // ako je checkUSer dislajkovani onda lajkuj inace moras da obrises bre
+        {
+            //dd($checkUser->pluck('pivot')->where('is_dislike', '0'));
+            if($checkUser->pluck('pivot')->where('is_dislike', '0')->count() > 0)
+            {
+                $user->likedReplies()->where('reply_id', $reply_id)->detach($reply_id,$user_id);
+                $user->likedReplies()->attach($reply_id,['is_dislike'=> 1]);
+            }
+            else
+            {
+            $user->likedReplies()->where('reply_id', $reply_id)->detach($reply_id,$user_id);
+            }
+        }
+        else
+        {
+            $user->likedReplies()->attach($reply_id,['is_dislike'=> 1]);
+        }
         return redirect()->back();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Thread;
 use App\Models\Reply;
 use App\Models\Category;
@@ -22,9 +23,15 @@ class ThreadsController extends Controller
     public function index()
     {
         //
-        $threads = Thread::get();
+        $page = [];
+        $threads = Thread::simplePaginate(1);
         $categories = Category::get();
-        return view('threads.index',compact('threads'),compact('categories'));
+        foreach($categories as $category)
+        {
+            $page[Str::replace(' ','_',$category->title.'page')] = request()->query(Str::replace(' ','_',$category->title.'page'));
+        }
+        //$threads = $categories->threads
+        return view('threads.index',compact('threads','categories','page'));
     }
 
     /**
@@ -49,14 +56,15 @@ class ThreadsController extends Controller
     {
         //
         $this->validate ($request, [
-            'title' => 'required',
-            'thread_text' => 'required'
+            'topic' => 'required',
+            'comment' => 'required',
+            'categoryList' => 'required'
         ]);
 
         $thread = new Thread();
 
-        $thread->title = $request->input("title");
-        $thread->thread_text = $request->input("thread_text");
+        $thread->title = $request->input("topic");
+        $thread->thread_text = $request->input("comment");
         $thread->user_id = auth()->id();
         $thread->pinned = False;
 
