@@ -28,4 +28,9 @@ class Reply extends Model
     {
         return $this->belongsToMany(User::class,'likes','reply_id')->withPivot('is_dislike')->withTimestamps();
     }
+
+    public function files()
+    {
+        return $this->hasMany(File::class);
+    }
 }

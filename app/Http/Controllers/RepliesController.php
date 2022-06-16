@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Reply;
 use App\Models\User;
+use App\Models\File;
 use App\Http\Controllers\Auth;
 class RepliesController extends Controller
 {
@@ -45,7 +46,8 @@ class RepliesController extends Controller
     {
 
         $this->validate ($request, [
-            'reply' => 'required'
+            'reply' => 'required',
+            'file' => 'required|mimes:csv,txt,xlx,xls,pdf|max:2048'
         ]);
 
         $reply = new Reply();
@@ -54,6 +56,20 @@ class RepliesController extends Controller
         $reply->user_reply_id = auth()->id();
         $reply->thread_id = $request->input("thread_id");
         $reply->save();
+        //dd($request->allFiles());
+        //dd($reply);
+        foreach($request->allFiles()['file'] as $uploadedFile)
+        {
+            $file = new File();
+            $path = $uploadedFile->store('files');
+            //dd($uploadedFile);
+            $file->reply_id = $reply->getKey();
+            $file->name = $uploadedFile->getClientOriginalName();
+            $file->file_path = $path;
+            $file->save();
+        }
+
+
 
         return back();
 

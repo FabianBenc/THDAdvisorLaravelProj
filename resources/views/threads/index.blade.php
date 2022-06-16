@@ -35,10 +35,17 @@
         @foreach($categories as $category)
 
         @php
-            $threads = $category->threads->toQuery()->simplePaginate(2,['*'],$category->title.'page', $page[Str::replace(' ','_',$category->title.'page')]);
+            if(!$category->threads->isEmpty())
+            {
+                $threads = $category->threads->toQuery()->simplePaginate(5,['*'],$category->title.'page', $page[Str::replace(' ','_',$category->title.'page')]);
+            }
+            else
+            {
+                $threads = null;
+            }
         @endphp
             <h2 class="h4 text-white {{$colors[$i++%8]}} mb-0 p-4 rounded-top">{{$category->title}}</h2>
-            @if($threads->isNotEmpty())
+            @if(isset($threads) && $threads->isNotEmpty())
             @foreach($threads as $thread)
                 @if($loop->first)
                     <table class="table table-striped table-bordered table-responsive-lg">
@@ -48,9 +55,6 @@
                             <th scope="col" class="created-col">Created</th>
                             <th scope="col">Statistics</th>
                             <th scope="col" class="last-post-col">Latest post</th>
-                            @if((Auth::user()->id == $thread->user_id) || (Auth::user()->is_admin))
-                            <th scope="col">Action</th>
-                            @endif
                         </tr>
                         </thead>
                         <tbody>
@@ -85,24 +89,21 @@
                     <div>by: {{$thread->user->name}}</div>
                     <div>Posted at: {{$thread->created_at}}</div>
                 @endif
-                </td>
                 @if((Auth::user()->id == $thread->user_id) || (Auth::user()->is_admin))
-                <td>
                 <form method="post" action="{{ route('threads.destroy', ['thread' => $thread->thread_id]) }}">
                 @csrf
                 @method('DELETE')
                 <button type="submit"class="btn btn-danger">Delete</button>
-                </td>
                 </form>
                 @endif
               </tr>
             @endforeach
-            {{$threads->appends(Arr::except(Request::query(), $category->title.'page'))->links()}}
+            </tbody>
+          </table>
+          {{$threads->appends(Arr::except(Request::query(), $category->title.'page'))->links()}}<br>
             @else
             Nothing at the moment
             @endif
-            </tbody>
-          </table>
         @endforeach
         </div>
       </div>

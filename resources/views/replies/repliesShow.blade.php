@@ -1,16 +1,4 @@
 @foreach ($replies as $reply)
-    <!-- <div class="display-comment">
-        <strong>{{ $reply->user->name }}</strong>
-        <small>Created at: {{ $reply->created_at }}</small>
-        <p>{{ $reply->reply }}</p>
-        @csrf
-    </div>
-    <form method="post" action="{{ route('replies.destroy', $reply, ['replies' => $reply->reply_id]) }}">
-        @csrf
-
-        @method('DELETE')
-        <button type="submit"class="btn btn-danger">Delete</button>
-    </form> -->
     <div>
         <table class="table table-striped table-bordered table-responsive-lg">
             @csrf
@@ -26,8 +14,7 @@
                         <div>by <a href="#">{{ $reply->user->name }}</a></div>
                     </td>
                     <td class="post-col d-lg-flex justify-content-lg-between">
-                        <div><span class="font-weight-bold">Post subject: </span><strong>{{ $threads->title }}</strong>
-                        </div>
+                        <div><span class="font-weight-bold">Post subject: </span><strong>{{ $threads->title }}</strong></div>
                         <div><span class="font-weight-bold">Posted:</span> {{ $reply->created_at }}</div>
                     </td>
                 </tr>
@@ -66,7 +53,7 @@
                             @endif
                         </button>
                     </form>
-                    </div>
+                </div>
                     <div class = 'col'>
                     <form method="post" action="{{ route('dislike', $reply, ['replies' => $reply->reply_id]) }}">
                         @csrf
@@ -82,5 +69,4 @@
                 </div>
             </div>
         </div>
-    </div>
 @endforeach

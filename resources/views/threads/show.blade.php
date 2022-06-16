@@ -1,46 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="text-center text-primary">THDADVISOR</h3>
-                    <hr />
-                    <br/>
-                    <h3>{{ $threads->title }}</h3>
-                    <p>
-                        {{ $threads->thread_text }}
-                    </p>
-                    <hr />
-                    <form method="post" action="{{ route('threads.destroy', ['thread' => $threads->thread_id]) }}">
-                        @csrf
-
-                        @method('DELETE')
-                        <button type="submit"class="btn btn-danger">Delete</button>
-                    </form>
-                    <h4>Display Replies</h4>
-
-                    <hr />
-
-                    <h4>Reply</h4>
-                    <form method="post" action="{{ route('replies.store') }}">
-                        @csrf
-                        <div class="form-group">
-                            <textarea class="form-control" name="reply"></textarea>
-                            <input type="hidden" name="thread_id" value="{{ $threads->thread_id }}" />
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" class="btn btn-primary" value="reply" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->
-
 <div class="container my-3" style="background-color: white;">
       <nav class="breadcrumb">
         <a href="index.html" class="breadcrumb-item">Board index</a>
@@ -48,7 +8,7 @@
         <a href='/threads' class="breadcrumb-item">THDAdvisor</a>
         <span class="breadcrumb-item active">{{ $threads->title }}</span>
       </nav>
-      <div class="row">
+    <div class="row">
         <div class="col-12">
           <h2 class="h4 text-white bg-info mb-0 p-4 rounded-top">{{ $threads->title }}
             <form method="post" action="{{ route('threads.destroy', ['thread' => $threads->thread_id]) }}">
@@ -88,7 +48,7 @@
               </tr>
             </tbody>
           </table>
-          <form method="post" class="mb-3" action="{{ route('replies.store') }}">
+          <form method="post" class="mb-3" action="{{ route('replies.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
             <label for="reply">Reply to this post:</label>
@@ -98,7 +58,18 @@
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Reply" />
                 <button type="reset" class="btn btn-danger">Reset</button>
+                <input type="file" name="file[]" class="custom-file-input" id="chooseFile" multiple>
             </div>
+
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                     </ul>
+                </div>
+            @endif
            </form>
           <h3>Replies</h3>
           @include('replies.repliesShow', ['replies' => $threads->replies, 'thread_id' => $threads->thread_id])
