@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('topic_files', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->string('file_path')->nullable();
+            $table->unsignedBigInteger('thread_id');
             $table->timestamps();
+
+            $table->foreign('thread_id')->references('thread_id')->on('threads')->onDelete('cascade');
         });
     }
 
@@ -26,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('topic_files');
     }
 };

@@ -41,5 +41,6 @@ Route::resource('threads',ThreadsController::class);
 Route::resource('replies',RepliesController::class);
 
 Route::get('replies/{id}/download', [App\Http\Controllers\RepliesController::class, 'fileDownload'])->name('files.download');
+Route::get('threads/{id}/download', [App\Http\Controllers\ThreadsController::class, 'TopicFileDownload'])->name('TopicFiles.download');
 
 

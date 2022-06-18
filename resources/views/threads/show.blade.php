@@ -44,6 +44,9 @@
                 </td>
                 <td>
                   <p>{{ $threads->thread_text }}</p>
+                  @foreach($threads->topicFiles as $TopicFile)
+                        <p><a href="{{route('TopicFiles.download', $TopicFile->id)}}">{{ $TopicFile->name }}</a></p>
+                  @endforeach
                 </td>
               </tr>
             </tbody>

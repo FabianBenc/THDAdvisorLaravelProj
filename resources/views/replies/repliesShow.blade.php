@@ -25,7 +25,7 @@
                     <td>
                         <p>{{ $reply->reply }}</p>
                         @foreach($reply->files as $file)
-                        <p><a href="{{route('files.download', $file->id)}}">{{ $file->name }}</a></p>
+                            <p><a href="{{route('files.download', $file->id)}}">{{ $file->name }}</a></p>
                         @endforeach
                         <form method="post"
                             action="{{ route('replies.destroy', $reply, ['replies' => $reply->reply_id]) }}">

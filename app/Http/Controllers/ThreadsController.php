@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Thread;
+use App\Models\TopicFile;
 use App\Models\Reply;
 use App\Models\Category;
 use App\Http\Controllers\Auth;
@@ -30,7 +31,6 @@ class ThreadsController extends Controller
         {
             $page[Str::replace(' ','_',$category->title.'page')] = request()->query(Str::replace(' ','_',$category->title.'page'));
         }
-        //$threads = $categories->threads
         return view('threads.index',compact('threads','categories','page'));
     }
 
@@ -58,7 +58,11 @@ class ThreadsController extends Controller
         $this->validate ($request, [
             'topic' => 'required',
             'comment' => 'required',
-            'categoryList' => 'required'
+            'categoryList' => 'required',
+            'Topicfile.*' => 'mimes:ppt,pptx,doc,docx,pdf,xls,xlsx|max:204800'
+        ],
+         $messages = [
+            'mimes' => 'Please upload ppt,pptx,doc,docx,pdf,xls,xlsx files.',
         ]);
 
         $thread = new Thread();
@@ -73,6 +77,19 @@ class ThreadsController extends Controller
         $category = Category::find($request->categoryList);
         $thread->categories()->attach($category);
 
+        if(isset($request->allFiles()['Topicfile']))
+        {
+            foreach($request->allFiles()['Topicfile'] as $uploadedFile)
+            {
+                $TopicFile = new TopicFile();
+                $path = $uploadedFile->store('TopicFiles');
+                $TopicFile->thread_id = $thread->getKey();
+                $TopicFile->name = $uploadedFile->getClientOriginalName();
+                $TopicFile->file_path = $path;
+                $TopicFile->save();
+            }
+        }
+
         return redirect()->route('threads.index');
     }
 
@@ -84,11 +101,6 @@ class ThreadsController extends Controller
      */
     public function show($id)
     {
-        //
-        /*
-        $threads = DB::table('threads')->where('thread_id', $id)->get();
-        return view('threads.show',['threads'=>$threads[0]]);*/
-
         $threads = Thread::where('thread_id', $id)->get();
         return view('threads.show',['threads'=>$threads[0]]);
     }
@@ -125,7 +137,6 @@ class ThreadsController extends Controller
     public function destroy($id)
     {
         //
-        //dd(auth());
         $user = auth()->user();
         if($user->is_admin)
         {
@@ -137,5 +148,12 @@ class ThreadsController extends Controller
             $threads = Thread::where('thread_id', $id)->where('user_id', $user_id)->delete();
         }
         return redirect()->route('threads.index');
+    }
+
+    public function TopicFileDownload($TopicFile_id)
+    {
+        $TopicFile = TopicFIle::where('id', $TopicFile_id)->firstOrFail();
+        $path = storage_path('app/' . $TopicFile->file_path);
+        return response()->download($path, $TopicFile->name);
     }
 }

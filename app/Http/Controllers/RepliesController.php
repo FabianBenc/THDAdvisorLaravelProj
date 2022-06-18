@@ -60,18 +60,13 @@ class RepliesController extends Controller
         $reply->user_reply_id = auth()->id();
         $reply->thread_id = $request->input("thread_id");
         $reply->save();
-        //dd($request->allFiles());
-        //dd($reply);
 
         if(isset($request->allFiles()['file']))
         {
             foreach($request->allFiles()['file'] as $uploadedFile)
             {
                 $file = new File();
-                //dd($uploadedFile);
                 $path = $uploadedFile->store('files');
-                //dd($path);
-
                 $file->reply_id = $reply->getKey();
                 $file->name = $uploadedFile->getClientOriginalName();
                 $file->file_path = $path;
@@ -141,15 +136,11 @@ class RepliesController extends Controller
 
     public function liker($reply_id)
     {
-        //dd($reply_id);
         $user_id = auth()->user()->id;
         $user = User::findorFail(auth()->user()->id);
-        //dd($user->likedReplies, $user->likedReplies());
         $checkUser = $user->likedReplies()->where('likes.reply_id', $reply_id)->get();
-        //dd($checkUser->pluck('pivot'));
 
         if($checkUser->count() > 0)
-        // ako je checkUSer dislajkovani onda lajkuj inace moras da obrises bre
         {
             if($checkUser->pluck('pivot')->where('is_dislike', '1')->count() > 0)
             {
@@ -170,16 +161,12 @@ class RepliesController extends Controller
 
     public function disliker($reply_id)
     {
-        //dd($reply_id);
         $user_id = auth()->user()->id;
         $user = User::findorFail(auth()->user()->id);
-        //dd($user->likedReplies, $user->likedReplies());
         $checkUser = $user->likedReplies()->where('likes.reply_id', $reply_id)->get();
-        //dd($checkUser->pluck('pivot'));
 
         if($checkUser->count() > 0)
         {
-            //dd($checkUser->pluck('pivot')->where('is_dislike', '0'));
             if($checkUser->pluck('pivot')->where('is_dislike', '0')->count() > 0)
             {
                 $user->likedReplies()->where('reply_id', $reply_id)->detach($reply_id,$user_id);

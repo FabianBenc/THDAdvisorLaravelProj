@@ -1,27 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- <form method="POST" action="{{route('threads.store')}}">
-    @csrf
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-            <label for="title" class="form-label">Thread title</label>
-            <input type="text" id="title" name="title" class="form-control">
-            </div>
-            <div class="card">
-            <label for="thread_text" class="form-label">Thread text</label>
-            <input type="text" id="thread_text" name="thread_text" class="form-control">
-            </div>
-            <div>
-                <button type="submit">Submit</button>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-
 <div class="container my-3" style="background-color: white;">
       <nav class="breadcrumb">
         <a href="index.html" class="breadcrumb-item">Board index</a>
@@ -32,7 +11,7 @@
       <div class="row">
         <div class="col-12">
           <h2 class="h4 text-white bg-info mb-3 p-4 rounded">Create new topic</h2>
-          <form  class="mb-3" method="POST" action="{{route('threads.store')}}">
+          <form  class="mb-3" method="POST" action="{{route('threads.store')}}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
               <label for="title">Topic:</label>
@@ -54,6 +33,11 @@
                 </div>
             @endforeach
             </div>
+            <button type="submit" class="btn btn-primary">Create topic</button>
+            <button type="reset" class="btn btn-danger">Reset</button>
+            <input type="file" name="Topicfile[]" class="custom-file-input" id="chooseFile" multiple>
+            <a href='/threads' class="btn btn-warning text-white">Cancel</a>
+
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -62,10 +46,7 @@
                     @endforeach
                     </ul>
                 </div>
-@endif
-            <button type="submit" class="btn btn-primary">Create topic</button>
-            <button type="reset" class="btn btn-danger">Reset</button>
-            <a href='/threads' class="btn btn-warning text-white">Cancel</a>
+            @endif
           </form>
         </div>
       </div>

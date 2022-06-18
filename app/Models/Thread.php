@@ -28,4 +28,9 @@ class Thread extends Model
     {
         return $this->belongsToMany(Category::class,'categories_thread','thread_id');
     }
+
+    public function topicFiles()
+    {
+        return $this->hasMany(TopicFile::class,'thread_id');
+    }
 }
