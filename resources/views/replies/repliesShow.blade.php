@@ -23,7 +23,7 @@
                         <div><span class="font-weight-bold">Joined:</span><br>03 Apr 2017, 13:46</div>
                     </td>
                     <td>
-                        <p>{{ $reply->reply }}</p>
+                        <p style="word-break: break-all">{{ $reply->reply }}</p>
                         @foreach($reply->files as $file)
                             <p><a href="{{route('files.download', $file->id)}}">{{ $file->name }}</a></p>
                         @endforeach
@@ -35,41 +35,39 @@
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             @endif
                         </form>
-                        dislikes
-                        <p>{{ $reply->likes->pluck('pivot')->where('is_dislike', '1')->count() }}</p>
-                        likes
-                        <p>{{ $reply->likes->pluck('pivot')->where('is_dislike', '0')->count() }}</p>
+                        <div>
+                            <div class = "d-flex justify-content-end">
+                                <div class = "col" style="flex:0;">
+                                    <form method="post" action="{{ route('like', $reply, ['replies' => $reply->reply_id]) }}">
+                                        @csrf
+                                        <button type="submit" class="btn">
+                                        @if ($reply->likes->pluck('pivot')->where('user_id', Auth::user()->id)->where('is_dislike', '0')->count() == 1)
+                                        <i class="fa-solid fa-thumbs-up fa-2xl" style="color:green" title='unlike'></i>
+                                            @else
+                                            <i class="fa-regular fa-thumbs-up fa-2xl" title='like'></i>
+                                            @endif
+                                            <p>{{ $reply->likes->pluck('pivot')->where('is_dislike', '0')->count() }}</p>
+                                        </button>
+                                    </form>
+                                </div>
+                                    <div class = "col" style="flex:0;">
+                                    <form method="post" action="{{ route('dislike', $reply, ['replies' => $reply->reply_id]) }}">
+                                        @csrf
+                                        <button type="submit" class="btn">
+                                            @if ($reply->likes->pluck('pivot')->where('user_id', Auth::user()->id)->where('is_dislike', '1')->count() == 1)
+                                                <i class="fa-solid fa-thumbs-down fa-2xl" style="color:red" title='undislike'></i>
+                                            @else
+                                                <i class="fa-regular fa-thumbs-down fa-2xl" title='dislike'></i>
+                                            @endif
+                                            <p>{{ $reply->likes->pluck('pivot')->where('is_dislike', '1')->count() }}</p>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div>
-            <div class = 'row justify-content-left  row-cols-auto'>
-                <div class = 'col'>
-                    <form method="post" action="{{ route('like', $reply, ['replies' => $reply->reply_id]) }}">
-                        @csrf
-                        <button type="submit" class="btn btn-success">
-                        @if ($reply->likes->pluck('pivot')->where('user_id', Auth::user()->id)->where('is_dislike', '0')->count() == 1)
-                                Already liked
-                            @else
-                                Like
-                            @endif
-                        </button>
-                    </form>
-                </div>
-                    <div class = 'col'>
-                    <form method="post" action="{{ route('dislike', $reply, ['replies' => $reply->reply_id]) }}">
-                        @csrf
-                        <button type="submit" class="btn btn-warning">
-                            @if ($reply->likes->pluck('pivot')->where('user_id', Auth::user()->id)->where('is_dislike', '1')->count() == 1)
-                                Already Disliked
-                            @else
-                                Dislike
-                            @endif
-                        </button>
-                    </form>
-                    </div>
-                </div>
-            </div>
         </div>
 @endforeach
