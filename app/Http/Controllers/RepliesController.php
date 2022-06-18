@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Reply;
 use App\Models\User;
 use App\Models\File;
@@ -47,7 +48,10 @@ class RepliesController extends Controller
 
         $this->validate ($request, [
             'reply' => 'required',
-            'file' => 'required|mimes:csv,txt,xlx,xls,pdf|max:2048'
+            'file.*' => 'mimes:ppt,pptx,doc,docx,pdf,xls,xlsx|max:204800'
+        ],
+         $messages = [
+            'mimes' => 'Please upload ppt,pptx,doc,docx,pdf,xls,xlsx files.',
         ]);
 
         $reply = new Reply();
@@ -58,25 +62,24 @@ class RepliesController extends Controller
         $reply->save();
         //dd($request->allFiles());
         //dd($reply);
-        foreach($request->allFiles()['file'] as $uploadedFile)
+
+        if(isset($request->allFiles()['file']))
         {
-            $file = new File();
-            $path = $uploadedFile->store('files');
-            //dd($uploadedFile);
-            $file->reply_id = $reply->getKey();
-            $file->name = $uploadedFile->getClientOriginalName();
-            $file->file_path = $path;
-            $file->save();
+            foreach($request->allFiles()['file'] as $uploadedFile)
+            {
+                $file = new File();
+                //dd($uploadedFile);
+                $path = $uploadedFile->store('files');
+                //dd($path);
+
+                $file->reply_id = $reply->getKey();
+                $file->name = $uploadedFile->getClientOriginalName();
+                $file->file_path = $path;
+                $file->save();
+            }
         }
 
-
-
         return back();
-
-
-        /*$reply = $thread->addReply(['reply' => request('reply'), 'user_reply_id' => auth()->id()]);
-
-        return back();*/
     }
 
     /**
@@ -175,7 +178,6 @@ class RepliesController extends Controller
         //dd($checkUser->pluck('pivot'));
 
         if($checkUser->count() > 0)
-        // ako je checkUSer dislajkovani onda lajkuj inace moras da obrises bre
         {
             //dd($checkUser->pluck('pivot')->where('is_dislike', '0'));
             if($checkUser->pluck('pivot')->where('is_dislike', '0')->count() > 0)
@@ -193,5 +195,12 @@ class RepliesController extends Controller
             $user->likedReplies()->attach($reply_id,['is_dislike'=> 1]);
         }
         return redirect()->back();
+    }
+
+    public function fileDownload($file_id)
+    {
+        $file = File::where('id', $file_id)->firstOrFail();
+        $path = storage_path('app/' . $file->file_path);
+        return response()->download($path, $file->name);
     }
 }

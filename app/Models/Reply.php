@@ -31,6 +31,6 @@ class Reply extends Model
 
     public function files()
     {
-        return $this->hasMany(File::class);
+        return $this->hasMany(File::class,'reply_id');
     }
 }

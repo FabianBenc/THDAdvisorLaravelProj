@@ -40,4 +40,6 @@ Route::post(
 Route::resource('threads',ThreadsController::class);
 Route::resource('replies',RepliesController::class);
 
+Route::get('replies/{id}/download', [App\Http\Controllers\RepliesController::class, 'fileDownload'])->name('files.download');
+
 
