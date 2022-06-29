@@ -25,13 +25,12 @@ class ThreadsController extends Controller
     {
         //
         $page = [];
-        $threads = Thread::simplePaginate(1);
         $categories = Category::get();
         foreach($categories as $category)
         {
             $page[Str::replace(' ','_',$category->title.'page')] = request()->query(Str::replace(' ','_',$category->title.'page'));
         }
-        return view('threads.index',compact('threads','categories','page'));
+        return view('threads.index',compact('categories','page'));
     }
 
     /**
@@ -150,10 +149,22 @@ class ThreadsController extends Controller
         return redirect()->route('threads.index');
     }
 
-    public function TopicFileDownload($TopicFile_id)
+    public function topicFileDownload($TopicFile_id)
     {
         $TopicFile = TopicFIle::where('id', $TopicFile_id)->firstOrFail();
         $path = storage_path('app/' . $TopicFile->file_path);
         return response()->download($path, $TopicFile->name);
+    }
+
+    public function threadSearch(Request $request)
+    {
+        $searchBar = $request->input('search');
+        $page = [];
+        $categories = Category::get();
+        foreach($categories as $category)
+        {
+            $page[Str::replace(' ','_',$category->title.'page')] = request()->query(Str::replace(' ','_',$category->title.'page'));
+        }
+        return view('threads.index',compact('searchBar','categories','page'));
     }
 }

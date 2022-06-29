@@ -11,13 +11,18 @@
     <div class="row">
         <div class="col-12">
           <h2 class="h4 text-white bg-info mb-0 p-4 rounded-top">{{ $threads->title }}
-            <form method="post" action="{{ route('threads.destroy', ['thread' => $threads->thread_id]) }}">
-                @csrf
-                @method('DELETE')
-                @if((Auth::user()->id == $threads->user_id) || (Auth::user()->is_admin))
-                <button type="submit"class="btn btn-danger">Delete</button>
-                @endif
-            </form>
+          <div class="d-flex justify-content-end">
+                <div class="col" style="flex:0;">
+                    <form method="post" action="{{ route('threads.destroy', ['thread' => $threads->thread_id]) }}">
+                            @csrf
+                            @method('DELETE')
+                            @if((Auth::user()->id == $threads->user_id) || (Auth::user()->is_admin))
+                            <button type="submit"class="btn btn-danger">Delete</button>
+                            @endif
+                        </form>
+                </div>
+            </div>
+
 
           </h2>
           <table class="table table-striped table-bordered table-responsive-lg">
@@ -61,7 +66,7 @@
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Reply" />
                 <button type="reset" class="btn btn-danger">Reset</button>
-                <input type="file" name="file[]" class="custom-file-input" id="chooseFile" multiple>
+                <input type="file" name="file[]" id="chooseFile" multiple>
             </div>
 
             @if ($errors->any())

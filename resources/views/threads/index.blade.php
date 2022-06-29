@@ -19,7 +19,14 @@
         @php
             if(!$category->threads->isEmpty())
             {
-                $threads = $category->threads->toQuery()->simplePaginate(5,['*'],$category->title.'page', $page[Str::replace(' ','_',$category->title.'page')]);
+                if(!isset($searchBar))
+                {
+                    $threads = $category->threads->toQuery()->sortable()->simplePaginate(5,['*'],$category->title.'page', $page[Str::replace(' ','_',$category->title.'page')]);
+                }
+                else
+                {
+                    $threads = $category->threads->toQuery()->where('threads.title', 'LIKE', '%'.$searchBar.'%')->orWhere('threads.thread_text', 'LIKE', '%'.$searchBar.'%')->get();
+                }
             }
             else
             {
@@ -33,8 +40,8 @@
                     <table class="table table-striped table-bordered table-responsive-lg">
                         <thead class="thead-light">
                         <tr>
-                            <th scope="col" class="topic-col">Topic</th>
-                            <th scope="col" class="created-col">Created</th>
+                            <th scope="col" class="topic-col">@sortablelink('title','Topic')</th>
+                            <th scope="col" class="created-col">@sortablelink('created_at')</th>
                             <th scope="col">Statistics</th>
                             <th scope="col" class="last-post-col">Latest post</th>
                         </tr>
@@ -82,7 +89,9 @@
             @endforeach
             </tbody>
           </table>
+          @if(!isset($searchBar))
           {{$threads->appends(Arr::except(Request::query(), $category->title.'page'))->links()}}<br>
+          @endif
             @else
             Nothing at the moment
             @endif

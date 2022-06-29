@@ -1,79 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
-
-                        <div class="row mb-3">
-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
     <style>
         *{
     margin: 0;
@@ -92,6 +19,8 @@
     background-color: white;
     padding: 25px 30px;
     border-radius: 5px;
+    border-style: solid;
+    border-color: #127ba3;
 }
 .container1 .title{
     font-size: 30px;
@@ -195,16 +124,18 @@ form .gender-details .category{
          overflow-y: scroll;
      }
  }
+ .center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 30%;
+}
     </style>
-<head>
-    <meta charset ="UTF-8">
-    <title> Sign Up</title>
-    <link rel="stylesheet" type="text/css" href="mystyles.css" media="screen" />
-    <meta name="viewport" content=""width=device-witdth, initial-scale="1.0">
-</head>
+
 <div class="body1">
     <div class="container1">
-       <div class="title">Sign Up</div>
+        <img src="{{url('/images/logo.png')}}" alt="Image" class="center"/>
+        <div class="title" style="text-align: center;">Sign Up</div>
        <form method="POST" action="{{ route('register') }}">
                         @csrf
            <div class="user-details">
@@ -230,7 +161,6 @@ form .gender-details .category{
                 </div>
                 <div class="input-box">
                     <span class="details">Username</span>
-                    <!-- <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label> -->
                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                                     @error('name')
@@ -294,8 +224,8 @@ form .gender-details .category{
                 </label>
                </div>
            </div>
-           <div class="button">
-               <input type="Submit" value="Register">
+           <div class="user-details">
+               <button type="Submit" value="Register" class="btn btn-primary">Register</button>
            </div>
        </form>
     </div>

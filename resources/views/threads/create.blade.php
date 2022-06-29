@@ -35,7 +35,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Create topic</button>
             <button type="reset" class="btn btn-danger">Reset</button>
-            <input type="file" name="Topicfile[]" class="custom-file-input" id="chooseFile" multiple>
+            <input type="file" name="Topicfile[]" id="chooseFile" multiple>
             <a href='/threads' class="btn btn-warning text-white">Cancel</a>
 
             @if ($errors->any())

@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\Reply;
 use App\Http\Controllers\ThreadsController;
 use App\Http\Controllers\RepliesController;
@@ -20,9 +22,6 @@ Route::get('/', function () {
    return view('welcome');
 });
 
-
-
-
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -41,6 +40,12 @@ Route::resource('threads',ThreadsController::class);
 Route::resource('replies',RepliesController::class);
 
 Route::get('replies/{id}/download', [App\Http\Controllers\RepliesController::class, 'fileDownload'])->name('files.download');
-Route::get('threads/{id}/download', [App\Http\Controllers\ThreadsController::class, 'TopicFileDownload'])->name('TopicFiles.download');
+Route::get('threads/{id}/download', [App\Http\Controllers\ThreadsController::class, 'topicFileDownload'])->name('TopicFiles.download');
+Route::post('threads/search', [App\Http\Controllers\ThreadsController::class, 'threadSearch'])->name('threads.threadSearch');
+
+
+
+
+
 
 
