@@ -21,7 +21,7 @@
             {
                 if(!isset($searchBar))
                 {
-                    $threads = $category->threads->toQuery()->sortable()->simplePaginate(5,['*'],$category->title.'page', $page[Str::replace(' ','_',$category->title.'page')]);
+                    $threads = $category->threads->toQuery()->sortable()->simplePaginate(3,['*'],$category->title.'page', $page[Str::replace(' ','_',$category->title.'page')]);
                 }
                 else
                 {
@@ -41,7 +41,7 @@
                         <thead class="thead-light">
                         <tr>
                             <th scope="col" class="topic-col">@sortablelink('title','Topic')</th>
-                            <th scope="col" class="created-col">@sortablelink('created_at')</th>
+                            <th scope="col" class="created-col">@sortablelink('created_at', 'Created At')</th>
                             <th scope="col">Statistics</th>
                             <th scope="col" class="last-post-col">Latest post</th>
                         </tr>
