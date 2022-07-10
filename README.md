@@ -18,6 +18,8 @@ or
 
 >copy .env.example .env
 
+and then
+
 >php artisan key:generate
 5. Open Xampp and start Apache and MySQL; In mySQL section click Admin to open up PHPMyAdmin;Create a new empty database by pressing the `New` button; **IMPORTANT you must name your database `laravel`**.
 6. Run the migrations by exectuing the command `php artisan migrate`in your terminal.
