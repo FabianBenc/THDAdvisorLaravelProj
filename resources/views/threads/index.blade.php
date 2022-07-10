@@ -3,11 +3,6 @@
 @section('content')
 <a href='/threads/create' class="btn btn-lg btn-primary">New Topic</a>
 <div class="container my-3">
-      <nav class="breadcrumb">
-        <a href="index.html" class="breadcrumb-item">Board index</a>
-        <a href="overview-forum-category.html" class="breadcrumb-item">Forum category</a>
-        <span class="breadcrumb-item active">Forum name</span>
-      </nav>
       <div class="row">
         <div class="col-12" style="background-color: white;">
         @php

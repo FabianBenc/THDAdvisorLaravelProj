@@ -2,12 +2,6 @@
 
 @section('content')
 <div class="container my-3" style="background-color: white;">
-      <nav class="breadcrumb">
-        <a href="index.html" class="breadcrumb-item">Board index</a>
-        <a href="overview-forum-category.html" class="breadcrumb-item">Forum category</a>
-        <a href="overview-topics.html" class="breadcrumb-item">Forum name</a>
-        <span class="breadcrumb-item active">Create new topic</span>
-      </nav>
       <div class="row">
         <div class="col-12">
           <h2 class="h4 text-white bg-info mb-3 p-4 rounded">Create new topic</h2>
